@@ -1,3 +1,3 @@
 # PHP
 
-Directorio de ejercicos de PHP
+Directorio de ejercicios de PHP
