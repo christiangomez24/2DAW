@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduce el precio com IVA</title>
+</head>
+<body>
+    <script>
+        /* 
+        Number es un objeto primitivo envolvente que permite representar y manipular valores numéricos cómo 37 o -9.25. 
+        El constructor Number contiene constantes y métodos para trabajar con números. 
+        Valores de otro tipo pueden ser convertidos a números usando la función Number().
+
+        Utilizo Number para pasar la cadena string del prompt a números para poder realizar operaciones. 
+        No utilizo parseInt ya que eliminaría los decimales al solo quedarse con los enteros.
+        */
+
+
+        do {
+            precio = Number(prompt("Introduce el precio com IVA de un artículo"));
+            console.log(precio);
+        } while (isNaN(precio)); // Para comparar si es o no un numero existe isNan(valor);
+        
+        do {
+            iva = Number(prompt("Introduce el iva aplicado \n 4%, 10% o 21%"));
+            console.log(iva);
+        } while (isNaN(iva)); // Para comparar si es o no un numero existe isNan(valor);
+
+        let total = precio / (1.00+iva/100);
+        console.log("Precio sin IVA aplicado "+total);
+
+    </script>
+    
+</body>
+</html>
