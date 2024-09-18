@@ -6,6 +6,8 @@
     <title>Contador</title>
 </head>
 <body>
+    <h1>Contadores</h1>
+    <p>Este contador va del 1 al 100:</p>
     <?php 
         //Listar del 1 al 100
         for ($i=1;$i<101;$i++){
@@ -17,6 +19,7 @@
         }
     ?>
     <br>
+    <p>Este otro va del 10 al 0:</p>
     <?php
        //cuenta atrás de 10 - 0  
        $x = 10;
