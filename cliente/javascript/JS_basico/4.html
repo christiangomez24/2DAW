@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        //devuelve factorial de un numero
+        let factorial = 1;
+        let num = prompt("Introduce un número:");
+        //console.log(num);
+        
+        do {
+            factorial*=num;
+            num--;
+        } while (num>0);
+
+        console.log(factorial);
+    </script>
+</body>
+</html>
