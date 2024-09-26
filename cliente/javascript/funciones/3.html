@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>pvp</title>
 </head>
 <body>
     <script>
+        function pvp(precio_base,tipo_iva=21){
+            return precio_base/100 * (100+tipo_iva);
+        }
 
-        let miArray = [1,21,32,400,1000];
-        console.log(miArray.length);
+
+        console.log(pvp(100,2));
 
     </script>
 </body>
