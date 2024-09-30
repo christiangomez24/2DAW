@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=>, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function mueve_discos (n_discos,origen,destino,intermedia){
+            if (n_discos>0){
+                mueve_discos(n_discos-1,origen,intermedia,destino);
+                console.log("Mueve disco de "+origen+" a "+destino);
+                mueve_discos(n_discos-1,intermedia,destino,origen);
+            }
+        }
+        mueve_discos(2,"A","C","B");
+    </script>
+</body>
+</html>
