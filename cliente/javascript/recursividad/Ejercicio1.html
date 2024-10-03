@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problemas de recursividad</title>
+</head>
+<body>
+    <script>
+        mi_array= [1,2,3];
+        function permuta(array){
+            console.log(mi_array[0]+","+mi_array[1]+","+mi_array[2]);
+            console.log(permuta(mi_array));
+        }
+        permuta(mi_array);
+    </script>
+</body>
+</html>

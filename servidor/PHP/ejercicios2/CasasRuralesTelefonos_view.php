@@ -6,6 +6,7 @@
     <title>Document</title>
 </head>
 <body>
+    <h1>Casas Rurales</h1>
     <?php
         include "CasasRuralesTelefonos.php";
 

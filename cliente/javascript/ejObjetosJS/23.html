@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+            // Function to check if an array contains a specific element
+    function contains(arr, element) {
+        // Iterate through the array
+        for (var i = 0; i < arr.length; i++) {
+            // Check if the current element is equal to the target element
+            if (arr[i] === element) {
+                // Return true if the element is found in the array
+                return true;
+            }
+        }
+        // Return false if the element is not found in the array
+        return false;
+    }
+
+    // Sample array
+    arr = [2, 5, 9, 6];
+
+    // Output the result of checking if the array contains the element '5'
+    console.log(contains(arr, 5));
+
+    </script>
+</body>
+</html>
