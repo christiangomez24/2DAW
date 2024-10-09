@@ -71,14 +71,14 @@
       <?php } ?>
         </div> <?php
 
-            for ($i=0;$i<$nEsc;$i++){ ?>
+            for ($i=1;$i<=$nEsc;$i++){ ?>
                 <div class="row">
                     <div class="col">
                         Escaño <?php echo $i+1 ?>
                     </div> <?php
             for ($a=0;$a<$nPP;$a++){ ?>
                 <div class="col">
-                    500.000
+                    <?php echo floor(500000/$i); //floor retorna sin decimales ?> 
                 </div>
       <?php } ?>
                 </div>
@@ -94,11 +94,10 @@
 <br><br><br><br>
 <p>Nos piden el diseño de una página web donde introduzcamos el número de partidos políticos, la
 cantidad de votos por partido y el número de escaños a repartir y nos devuelva una tabla como la
-siguiente:
-• Donde las columnas son el Total de votos del partido dividido entre el número de escaños.
-– 500.000/1, 500.000/2 ... 500.000/7 y así con los 4 partidos.
-(c) Resultado
-Donde hemos metido los 4 partidos el número total de votos por partido 500.000, 300.000, 150.000 y
+siguiente:</p>
+<p>• Donde las columnas son el Total de votos del partido dividido entre el número de escaños.</p>
+<p>500.000/1, 500.000/2 ... 500.000/7 y así con los 4 partidos.</p>
+<p>Donde hemos metido los 4 partidos el número total de votos por partido 500.000, 300.000, 150.000 y
 50.000 respectivamente y el total de escaños a repartir, en este caso 7. Si nos fijamos y simplificando
 mucho hay que marcar las 7 cantidades mayores.</p>
 
