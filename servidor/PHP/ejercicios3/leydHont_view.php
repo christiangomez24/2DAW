@@ -11,7 +11,7 @@
     <h1 class="text-center">Ley d'Hont</h1><br>
 
 
-    <?php if(!isset($_REQUEST['numPartidosPoliticos']) && !isset($_REQUEST['cantVotPart'])) { ?>
+    <?php if(!isset($_REQUEST['numPartidosPoliticos']) && !isset($_REQUEST['cantVotPart0'])) { ?>
     <form action="" method="post">
         <div class="mb-3">
             <label for="numPartidosPoliticos" class="form-label">Número de Partidos Políticos</label>
@@ -35,8 +35,8 @@
                 echo "<h3>Partido Político ".($i+1)."</h3><br>"; ?>  
                 <form action="" method="post">  
                     <div class="mb-3">
-                        <label for="cantVotPart" class="form-label">Cantidad de votos</label>
-                        <input type="number" class="form-control" id="cantVotPart" name="cantVotPart">
+                        <label for="<?php echo 'cantVotPart'.$i; ?>" class="form-label">Cantidad de votos</label>
+                        <input type="number" class="form-control" id="<?php echo 'cantVotPart'.$i; ?>" name="<?php echo 'cantVotPart'.$i; ?>">
                     </div> <?php
             }       ?>
                     <!-- Es necesario volver a pasar el valor para recogerlo por variable para el siguiente form -->
@@ -48,11 +48,14 @@
         }
 
 
-        if(isset($_REQUEST['cantVotPart'])) {
-            $cantVotPart = $_REQUEST["cantVotPart"];
+        if(isset($_REQUEST['cantVotPart0'])) {
             $nPP = $_REQUEST["nPP"];
             $nEsc = $_REQUEST["nEsc"];
 
+            // Recoger cantidad de votos por partido:
+            for ($f=0;$f<$nPP;$f++){
+                $arrayVotosPartidos[] = $_REQUEST["cantVotPart".$f];
+            }
             
             ?>
             
@@ -66,19 +69,34 @@
             <?php
             for ($i=0;$i<$nPP;$i++){ ?>
             <div class="col">
-                Partido <?php echo $i+1; ?>
+                <b>Partido <?php echo $i+1; ?> </b>
             </div>
       <?php } ?>
-        </div> <?php
+        </div>
+        <div class="row">
+            <div class="col">
+                <b>Votos</b>
+            </div> 
+            <?php 
+            foreach ($arrayVotosPartidos as $votos){ ?>
+                <div class="col">
+                    <?php echo $votos; ?>
+                </div> <?php
+            }
+            
+            
+            ?>
+        </div>
+         <?php
 
             for ($i=1;$i<=$nEsc;$i++){ ?>
                 <div class="row">
                     <div class="col">
-                        Escaño <?php echo $i+1 ?>
+                        <b>Escaño <?php echo $i ?> </b>
                     </div> <?php
             for ($a=0;$a<$nPP;$a++){ ?>
                 <div class="col">
-                    <?php echo floor(500000/$i); //floor retorna sin decimales ?> 
+                    <?php echo floor($arrayVotosPartidos[$a]/$i); //floor retorna sin decimales ?> 
                 </div>
       <?php } ?>
                 </div>
@@ -86,20 +104,6 @@
         
         
     </div>
-
-
-
-
-
-<br><br><br><br>
-<p>Nos piden el diseño de una página web donde introduzcamos el número de partidos políticos, la
-cantidad de votos por partido y el número de escaños a repartir y nos devuelva una tabla como la
-siguiente:</p>
-<p>• Donde las columnas son el Total de votos del partido dividido entre el número de escaños.</p>
-<p>500.000/1, 500.000/2 ... 500.000/7 y así con los 4 partidos.</p>
-<p>Donde hemos metido los 4 partidos el número total de votos por partido 500.000, 300.000, 150.000 y
-50.000 respectivamente y el total de escaños a repartir, en este caso 7. Si nos fijamos y simplificando
-mucho hay que marcar las 7 cantidades mayores.</p>
 
 
 
