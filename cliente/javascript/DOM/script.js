@@ -50,7 +50,4 @@ for (i=0;i<6;i++){
     descripcion.appendChild(document.createTextNode(recetasJSON[i]["description"].substring(0,50)+"..."));
     cuerpoTarjeta.appendChild(descripcion);
 
-
-
-
 }

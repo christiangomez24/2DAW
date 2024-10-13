@@ -338,7 +338,7 @@ const recetasJSON = [
         "$oid": "B6E153ADE4544103904EB8B005858B32"
       },
       "author": "Francia Molano",
-      "name": "Lomo Saltado",
+      "name": "Lomo Salteado",
       "description": "Buscando una cena maravillosa? Este lomo sofrito con verduras al estilo Peruano servido con arroz--una comida deliciosa.",
       "preparation_time": 40,
       "cook_time": 40,

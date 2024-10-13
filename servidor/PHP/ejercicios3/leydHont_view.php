@@ -87,20 +87,60 @@
             
             ?>
         </div>
-         <?php
 
-            for ($i=1;$i<=$nEsc;$i++){ ?>
-                <div class="row">
-                    <div class="col">
-                        <b>Escaño <?php echo $i ?> </b>
-                    </div> <?php
-            for ($a=0;$a<$nPP;$a++){ ?>
-                <div class="col">
-                    <?php echo floor($arrayVotosPartidos[$a]/$i); //floor retorna sin decimales ?> 
-                </div>
-      <?php } ?>
-                </div>
-    <?php } } ?>
+
+        <?php
+// Primero, calculamos todos los valores y los almacenamos en un arreglo
+$valores = [];
+for ($i = 1; $i <= $nEsc; $i++) {
+    for ($a = 0; $a < $nPP; $a++) {
+        $valores[] = floor($arrayVotosPartidos[$a] / $i);
+    }
+}
+
+// Ordenamos los valores en orden descendente y seleccionamos los 7 primeros
+rsort($valores);
+$top7 = array_slice($valores, 0, 7);
+
+// Luego, generamos el HTML, resaltando los valores que estén en el top 7
+for ($i = 1; $i <= $nEsc; $i++) { ?>
+    <div class="row">
+        <div class="col">
+            <b>Escaño <?php echo $i ?> </b>
+        </div>
+        <?php
+        for ($a = 0; $a < $nPP; $a++) {
+            $valor = floor($arrayVotosPartidos[$a] / $i);
+            // Si el valor actual está en los primeros 7 valores más grandes, añadimos la clase "amarillo"
+
+            // Esta línea de código utiliza el operador ternario en PHP, que es una forma simplificada de un if y else. La estructura general de un operador ternario es:                
+            //     $variable = (condición) ? valor_si_verdadero : valor_si_falso;
+            $clase = in_array($valor, $top7) ? "amarillo" : "";
+            // in_array es una función de PHP que verifica si un valor existe dentro de un arreglo. Devuelve true si $valor se encuentra en $top7, y false si no.
+
+            // Equivalente con if...else
+            // Para verlo más claro, el operador ternario hace lo mismo que el siguiente bloque de código if...else:          
+            // if (in_array($valor, $top7)) {
+            //     $clase = "amarillo";
+            // } else {
+            //     $clase = "";
+            // }
+
+
+
+            ?>
+            <div class="col <?php echo $clase; ?>">
+                <?php echo $valor; ?> 
+            </div>
+            <?php
+        }
+        ?>
+    </div>
+<?php
+}
+
+
+} ?>
         
         
     </div>
