@@ -145,6 +145,11 @@ for ($i = 1; $i <= $nEsc; $i++) { ?>
         
     </div>
 
+    <style>
+        .amarillo{
+            background-color: yellow;
+        }
+    </style>
 
 
 </body>

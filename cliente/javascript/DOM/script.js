@@ -1,3 +1,17 @@
+//Instanciacion de funciones
+
+let detalle = (detalleID) =>console.log(detalleID);
+
+
+
+
+
+
+
+
+//Creación del DOM
+
+
 div = document.createElement('div');
 div.id = "contenido";
 document.body.appendChild(div);
@@ -14,6 +28,15 @@ for (i=0;i<6;i++){
     tarjeta = document.createElement('div');
     tarjeta.classList.add("card");
     tarjeta.id = "tarjeta"+i;
+
+
+    // event.currentTarget es el elemento al cual el evento fue asignado, 
+    //  mientras que event.target es el elemento donde realmente ocurrió el clic.
+    // event.currentTarget.id te devuelve el id del elemento que tiene registrado el evento.
+    // Usar event.currentTarget es especialmente útil cuando se trabaja con contenedores
+    // que tienen varios subelementos y quieres asegurarte de que estás interactuando con el
+    // contenedor, no con el subelemento que disparó el evento.
+    tarjeta.addEventListener("click", (event)=>{detalle(event.currentTarget.id)});
     div.appendChild(tarjeta);
 
     //creo imagen
