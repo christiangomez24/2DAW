@@ -1,15 +1,29 @@
-body{background-color: pink;}
-body div.card{float: left;}
+body{
+  background-color: pink;
+}
+
+body div.card{
+  float: left;
+}
 
 .card{
     width: 30%;
     margin: 1.5%;
 }
+
+.card-body{
+  background-color: #efe8e8;
+}
+
 #contenido {
     margin-left: 1.3%;
 }
 
-#contenido h1 {text-align: center; padding-top: 4%; padding-bottom: 1%;}
+#contenido h1 {
+  text-align: center; 
+  padding-top: 4%; 
+  padding-bottom: 1%;
+}
 
 .card-title{
     height: 5rem;
@@ -17,3 +31,71 @@ body div.card{float: left;}
 .card-subtitle {
     height: 1rem;
 }
+
+/* ++++++++++++++++ Lightbox ++++++++++++++++ */
+ 
+  /* The Modal (background) */
+  .modal {
+    display: block;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.7);
+  }
+  
+  /* Modal Content */
+  .modal-content {
+    position: relative;
+    background-color: #dcd2d2;
+    margin: auto;
+    padding: 0;
+    width: 90%;
+    max-width: 1200px;
+  }
+  
+  /* The Close Button */
+  .close {
+    color: white;
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    font-size: 35px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #999;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  img.demo {
+    opacity: 0.6;
+  }
+  
+  .active,
+  .demo:hover {
+    opacity: 1;
+  }
+  
+  img.hover-shadow {
+    transition: 0.3s;
+  }
+  
+  .hover-shadow:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  div.modal-content div.card-body h5.card-title{
+    padding: 20px;
+    text-align: center;
+  }
+  div.modal-content div.card-body h6, div.modal-content div.card-body p{
+    padding: 20px;
+  }
