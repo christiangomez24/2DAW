@@ -21,6 +21,16 @@
 			border-radius: 5px;
 		}
 
+		#paddle2 {
+			width: 40px;
+			height: 150px;
+			position: absolute;
+			top: calc(50% - 75px);
+			right: 50px;
+			background-color: #666666;
+			border-radius: 5px;
+		}
+
 		#ball {
 			width: 80px;
 			height: 80px;
@@ -55,11 +65,25 @@
 			width: 90%;
 			max-width: 1200px;
 		}
+
+		#ventana {
+			border: 1px solid red;
+			height: 90vh;
+			width: 90vw;
+			margin-top: 5vh;
+			margin-bottom: 5vh;
+			margin-left: 5vw;
+			margin-right: 5vw;
+			position: absolute;
+			}
 	</style>
 	</head>
 	<body>
-		<div id="paddle"><!-- paddle --></div>
-		<div id="ball"><!-- ball --></div>
+		<div id="ventana">
+			<div id="paddle"><!-- paddle --></div>
+			<div id="paddle2"><!-- paddle --></div>
+			<div id="ball"><!-- ball --></div>
+		</div>
 	</body>	
-		<script src="script.js"></script>
+		<script src="script2.js"></script>
 </html>
