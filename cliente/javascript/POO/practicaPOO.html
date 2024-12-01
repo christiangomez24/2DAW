@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica - Programación Orientada a Objetos</title>
+</head>
+<body>
+
+    <script>
+
+        cantidadCirculos = prompt("Introduce la cantidad de círculos a pintar en pantalla");
+        alert(cantidadCirculos);
+
+        class Circulos {
+            constructor(cantidad, tamaño, color, posicion){
+                this.cantidad = cantidad;
+                this.tamaño = tamaño;
+                this.color = color;
+                this.posicion = posicion;
+            }
+
+            pintar_circulo() {
+                
+            }
+        }
+
+        let circulitos = new Circulos("10","20x20","azul","centrado");
+        console.log(circulitos);
+
+    </script>
+    
+</body>
+</html>
+
+
+Se pide realizar un script con JavaScript que muestre por pantalla círculos de diferentes colores y diámetros en posiciones aleatorias de la pantalla (pero en el área visible). Para ello se debe emplear POO, creando una clase que tenga, al menos, las propiedades siguientes:
+
+        Tamaño
+        Color
+        Posición (X,Y)
+
+y al menos un método 
+
+        constructor: para inicializar/calcular las propiedades necesarias
+        pintar_circulo(), el cual pintará el círculo por pantalla
+
+El número de círculos que aparecerán debe estar parametrizada mediante una sola variable, la cual podrá ser introducida por el usuario (haciendo uso de prompt())
