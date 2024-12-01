@@ -1,89 +1,250 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>PONG</title>
+    <meta charset="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>PONG</title>
+    <style>
+        body {
+            overflow: hidden;
+            text-align: center;
+            background-color: #000;
+            color: #FFF;
+            font-family: Arial, sans-serif;
+        }
+        #pala1, #pala2, #bola {
+            position: absolute;
+            background-color: #FFF;
+        }
+        #pala1, #pala2 {
+            width: 20px;
+            height: 100px;
+        }
+        #bola {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <div id="pala1"></div>
+    <div id="pala2"></div>
+    <div id="bola"></div>
 
-	<style>
-		body {
-			overflow:hidden;
-			background-color: black;
-		}
-		
-		#paddle {
-			width: 40px;
-			height: 150px;
-			position: absolute;
-			top: calc(50% - 75px);
-			left: 50px;
-			background-color: #666666;
-			border-radius: 5px;
-		}
+    <script>
+        // Inicializo variables
+        const pala1 = document.getElementById("pala1");
+        const pala2 = document.getElementById("pala2");
+        const bola = document.getElementById("bola");
+        let pantallaInicio, pantallaConfiguracion, pantallaGameOver, mensajeGanador, checkboxSonido;
 
-		#paddle2 {
-			width: 40px;
-			height: 150px;
-			position: absolute;
-			top: calc(50% - 75px);
-			right: 50px;
-			background-color: #666666;
-			border-radius: 5px;
-		}
+        let velocidadX = 4;
+        let velocidadY = 4;
+        let velocidadPala = 10;
+        let numJugadores = 1;
+        let nombreJugador1 = "Jugador 1";
+        let nombreJugador2 = "Jugador 2";
+        let intervalo;
 
-		#ball {
-			width: 80px;
-			height: 80px;
-			position: absolute;
-			top: calc(50% - 40px);
-			left: calc(50% - 40px);
-			background-color: #AA0000;
-			border-radius: 40px;
-			
-		}
+        function crearPantallaInicio() {
+            pantallaInicio = document.createElement("div");
+            pantallaInicio.innerHTML = `
+                <h1>Pong</h1>
+                <p><strong>Controles del juego:</strong></p>
+                <p><strong>Jugador 1:</strong> Tecla 'W' para arriba, 'S' para abajo.</p>
+                <p><strong>Jugador 2:</strong> Flecha arriba y flecha abajo.</p>
+                <p>Presiona 'P' para pausar el juego.</p>
+                <label>Activar Efectos de Sonido:</label>
+                <input type='checkbox' id='checkboxSonido' checked><br><br>
+                <button onclick="mostrarPantallaConfiguracion()">Jugar</button>`;
+            document.body.appendChild(pantallaInicio);
+            checkboxSonido = document.getElementById("checkboxSonido");
+        }
 
-			/* The Modal (background) */
-		.menu-fondo {
-			display: block;
-			position: fixed;
-			z-index: 1;
-			padding-top: 100px;
-			left: 0;
-			top: 0;
-			width: 100%;
-			height: 100%;
-			overflow: auto;
-			background-color: rgba(0,0,0,0.7);
-		}
-		
-		/* Modal Content */
-		.menu-contenido {
-			position: relative;
-			background-color: #dcd2d2;
-			margin: auto;
-			padding: 0;
-			width: 90%;
-			max-width: 1200px;
-		}
+        function crearPantallaConfiguracion() {
+            pantallaConfiguracion = document.createElement("div");
+            pantallaConfiguracion.style.display = "none";
+            pantallaConfiguracion.innerHTML = `
+                <h2>Configuración del Juego</h2>
+                <label for='numJugadores'>Número de Jugadores:</label>
+                <select id='numJugadores' onchange='actualizarConfiguracionJuego()'>
+                    <option value='1'>1 Jugador</option>
+                    <option value='2'>2 Jugadores</option>
+                </select><br><br>
+                <label for='nombreJugador1'>Nombre del Jugador 1:</label>
+                <input type='text' id='nombreJugador1' placeholder='Jugador 1'><br><br>
+                <label for='nombreJugador2'>Nombre del Jugador 2:</label>
+                <input type='text' id='nombreJugador2' placeholder='Jugador 2' disabled><br><br>
+                <label for='nivelDeDificultad'>Nivel de Dificultad:</label>
+                <select id='nivelDeDificultad'>
+                    <option value='1'>Fácil</option>
+                    <option value='2'>Normal</option>
+                    <option value='3'>Difícil</option>
+                </select><br><br>
+                <button onclick='iniciarJuegoPong()'>Comenzar</button>`;
+            document.body.appendChild(pantallaConfiguracion);
+        }
 
-		#ventana {
-			border: 1px solid red;
-			height: 90vh;
-			width: 90vw;
-			margin-top: 5vh;
-			margin-bottom: 5vh;
-			margin-left: 5vw;
-			margin-right: 5vw;
-			position: absolute;
-			}
-	</style>
-	</head>
-	<body>
-		<div id="ventana">
-			<div id="paddle"><!-- paddle --></div>
-			<div id="paddle2"><!-- paddle --></div>
-			<div id="ball"><!-- ball --></div>
-		</div>
-	</body>	
-		<script src="script2.js"></script>
+        function crearPantallaGameOver() {
+            pantallaGameOver = document.createElement("div");
+            pantallaGameOver.style.display = "none";
+            pantallaGameOver.innerHTML = `
+                <h2>Fin del Juego</h2>
+                <p id='mensajeGanador'></p>
+                <button onclick='mostrarPantallaConfiguracion()'>Jugar de Nuevo</button>`;
+            document.body.appendChild(pantallaGameOver);
+            mensajeGanador = document.getElementById("mensajeGanador");
+        }
+
+        // Llamo a las funciones para crear todas las pantallas necesarias aunque ocultas evitando así errores
+        crearPantallaInicio();
+        crearPantallaConfiguracion();
+        crearPantallaGameOver();
+
+        function mostrarPantallaConfiguracion() {
+            pantallaInicio.style.display = "none";
+            pantallaGameOver.style.display = "none";
+            pantallaConfiguracion.style.display = "block";
+        }
+
+        // Actualizo la configuración cuando se selecciona el número de jugadores
+        function actualizarConfiguracionJuego() {
+            numJugadores = document.getElementById("numJugadores").value;
+            if (numJugadores == 1) {
+                document.getElementById("nombreJugador2").disabled = true;
+            } else {
+                document.getElementById("nombreJugador2").disabled = false;
+            }
+        }
+
+        function iniciarJuegoPong() {
+            nombreJugador1 = document.getElementById("nombreJugador1").value || "Jugador 1"; // Si el usuario no ingresa nada le asigna el valor por defecto.
+            nombreJugador2 = document.getElementById("nombreJugador2").value || "Jugador 2";
+            numJugadores = document.getElementById("numJugadores").value;
+
+            // Ajustar la velocidad de la bola según el nivel de dificultad
+            let nivelDeDificultad = document.getElementById("nivelDeDificultad").value;
+            velocidadX = 3 + parseInt(nivelDeDificultad) * 2;
+            velocidadY = 3 + parseInt(nivelDeDificultad) * 2;
+
+            // Configuración de las palas y la bola
+            pantallaConfiguracion.style.display = "none";
+            pala1.style.left = "20px";
+            pala1.style.top = "calc(50% - 50px)";
+            pala2.style.right = "20px";
+            pala2.style.top = "calc(50% - 50px)";
+            bola.style.left = "calc(50% - 10px)";
+            bola.style.top = "calc(50% - 10px)";
+            pala2.style.display = numJugadores == 2 ? "block" : "none"; // Verdadero block, falso none. Si el numero de jugadores no es dos no muestra la pala2.
+
+            // Iniciar el movimiento de la bola
+            intervalo = setInterval(moverBola, 20);
+        }
+
+        // Función para mover la bola y gestionar colisiones
+        function moverBola() {
+            let bolaTop = bola.offsetTop;
+            let bolaLeft = bola.offsetLeft;
+
+            // Rebota en el límite superior e inferior
+            if (bolaTop <= 0 || bolaTop >= (window.innerHeight - bola.offsetHeight)) {
+                velocidadY = -velocidadY;
+                reproducirSonido();
+            }
+
+            // Rebota en la pala del Jugador 1
+            if (bolaLeft <= pala1.offsetLeft + pala1.offsetWidth &&
+                bolaTop + bola.offsetHeight >= pala1.offsetTop &&
+                bolaTop <= pala1.offsetTop + pala1.offsetHeight) {
+                velocidadX = -velocidadX;
+                reproducirSonido();
+            }
+
+            // Rebota en la pala del Jugador 2
+            if (numJugadores == 2 && bolaLeft + bola.offsetWidth >= pala2.offsetLeft &&
+                bolaTop + bola.offsetHeight >= pala2.offsetTop &&
+                bolaTop <= pala2.offsetTop + pala2.offsetHeight) {
+                velocidadX = -velocidadX;
+                reproducirSonido();
+            }
+
+            // Verifico si la bola ha salido por el lado izquierdo
+            if (bolaLeft <= 0) {
+                clearInterval(intervalo);
+                if (numJugadores == 1) { // Jugador 1 pierde
+                    mostrarFinJuego("¡Has perdido!");
+                } else {
+                    mostrarFinJuego(nombreJugador2 + " ha ganado"); // Hay 2 jugadores entonces gana jugador2
+                }
+                return;
+            }
+
+            // Verifico si la bola ha salido por el lado derecho (Jugador 2 pierde)
+            if (numJugadores == 2 && bolaLeft >= window.innerWidth) {
+                clearInterval(intervalo);
+                mostrarFinJuego(nombreJugador1 + " ha ganado");
+                return;
+            }
+
+            // Si es un solo jugador, la bola rebota en el lado derecho
+            if (numJugadores == 1 && bolaLeft >= (window.innerWidth - bola.offsetWidth)) {
+                velocidadX = -velocidadX;
+                reproducirSonido();
+            }
+
+            // Actualizo la posición de la bola cada "frame"
+            bola.style.top = (bolaTop + velocidadY) + "px";
+            bola.style.left = (bolaLeft + velocidadX) + "px";
+        }
+
+        function mostrarFinJuego(mensaje) {
+            pantallaGameOver.style.display = "block";
+            pantallaConfiguracion.style.display = "none";
+            mensajeGanador.innerText = mensaje;
+        }
+
+        // Controlar pulsaciones de teclado (mover palas y pausar juego)
+        document.addEventListener('keydown', function(tecla) {
+            let pala1Top = pala1.offsetTop;
+            let pala2Top = pala2.offsetTop;
+
+            // Mover la pala del jugador 1
+            if (tecla.which === 87 && pala1Top > 0) { // 'W' para arriba
+                pala1.style.top = (pala1Top - velocidadPala) + "px";
+            }
+            if (tecla.which === 83 && pala1Top + pala1.offsetHeight < window.innerHeight) { // 'S' para abajo
+                pala1.style.top = (pala1Top + velocidadPala) + "px";
+            }
+
+            // Mover la pala del jugador 2
+            if (numJugadores == 2) {
+                if (tecla.which === 38 && pala2Top > 0) { // Flecha para arriba
+                    pala2.style.top = (pala2Top - velocidadPala) + "px";
+                }
+                if (tecla.which === 40 && pala2Top + pala2.offsetHeight < window.innerHeight) { // Flecha para abajo
+                    pala2.style.top = (pala2Top + velocidadPala) + "px";
+                }
+            }
+
+            // Pausar el juego
+            if (tecla.which === 80) { // Tecla "P" para pausar
+                if (intervalo) {
+                    clearInterval(intervalo);
+                    intervalo = null;
+                } else {
+                    intervalo = setInterval(moverBola, 20);
+                }
+            }
+        });
+
+        // Función para reproducir el sonido del rebote
+        function reproducirSonido() {
+            if (checkboxSonido.checked) {
+                let audioPong = new Audio('arcade-ui-6-229503.mp3');
+                audioPong.play();
+            }
+        }
+    </script>
+</body>
 </html>
