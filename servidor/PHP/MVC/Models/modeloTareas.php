@@ -2,7 +2,7 @@
 
 require_once "Config/conexion.php";
 
-class ModeloTareas {
+class Tarea {
     private $pdo;
     public function __construct() {
         $database = new Conexion();
@@ -36,7 +36,7 @@ class ModeloTareas {
             $insercion->bindParam(':id',$id);
             return $insercion->execute();
         } catch (PDOException $e) {
-            die ($e->getMessage $e);
+            die ($e->getMessage());
         }
     }
     public function edit ($i,$t,$d,$c){ //id title description created_at
@@ -51,24 +51,22 @@ class ModeloTareas {
             die ($e->getMessage());
         }
     }
-    public function save($t,$d,$c){
+    public function save($t,$d){
         try{
-            $insercion = $this->pdo->prepare("INSERT INTO task(title,description,created_at) VALUES(:titulo,:descripcion,:fechaCreacion)");
+            $insercion = $this->pdo->prepare("INSERT INTO task(title,description) VALUES(:titulo,:descripcion)");
             $insercion->bindParam(':titulo',$t);
             $insercion->bindParam(':descripcion',$d);
-            $insercion->bindParam(':fechaCreacion',$c);
             return $insercion->execute();
         } catch (PDOException $e){
             die ($e->getMessage());
         }
     }
-    public function update($id,$titulo,$descripcion,$fechaCreacion){
-        $query = "UPDATE task SET title = :titulo, description = :descripcion, created_at = :fechaCreacion WHERE id = :id";
+    public function update($id,$titulo,$descripcion){
+        $query = "UPDATE task SET title = :titulo, description = :descripcion WHERE id = :id";
         $insercion = $this->pdo->prepare($query);
         $insercion->bindParam(":id",$id);
         $insercion->bindParam(":titulo",$titulo);
         $insercion->bindParam(":descripcion",$descripcion);
-        $insercion->bindParam(":fechaCreacion",$fechaCreacion);
         return $insercion->execute();
     }
 
