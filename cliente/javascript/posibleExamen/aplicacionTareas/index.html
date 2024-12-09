@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aplicación de Tareas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .task {
+      display: flex;
+      justify-content: space-between;
+      background-color: #f4f4f4;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .hidden {
+      display: none;
+    }
+    button {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Aplicación de Tareas</h1>
+  <div>
+    <input type="text" id="taskInput" placeholder="Escribe una tarea..." />
+    <button id="addTaskBtn">Añadir Tarea</button>
+    <button id="toggleTasksBtn">Mostrar/Ocultar Tareas</button>
+  </div>
+  <ul id="taskList"></ul>
+
+  <script src="app.js"></script>
+</body>
+</html>

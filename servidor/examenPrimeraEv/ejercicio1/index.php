@@ -3,12 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MVC - Listado de Tareas</title>
+    <title>Ejercicio 1</title>
 </head>
 <body>
     
 
 <?php
+
+// session_start();
+// if (!isset($_SESSION['usuario_id'])) {
+//     header("Location: Views/Usuarios/inicio.php");
+//     exit();
+// }
+// $usuario_id = $_SESSION['usuario_id'];
+
 require_once "Controllers/tareasControlador.php";
 
 $controller = new tareasControlador();

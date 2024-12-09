@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 1. Array
+        let frutas = ["manzana","banana","pera"];
+        console.log(frutas);
+        frutas.push("uva");
+        console.log(frutas);
+        frutas.shift(); // Elimina el primer elemento
+        console.log(frutas);
+
+        // 2 funciones
+        function calcularPromedio(a){
+            numElementos = a.length;
+            let sumaTotal = 0;
+            for (let i=0; i<numElementos; i++){
+                sumaTotal+=a[i];
+            }
+            promedio = sumaTotal/numElementos;
+            console.log(promedio);
+        
+        }
+        array = [4,8,15,16,23,42];
+        calcularPromedio(array);
+    </script>
+</body>
+</html>
