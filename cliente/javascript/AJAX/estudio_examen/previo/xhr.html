@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function cargarCategorias() {
+            let xhr = new XMLHttpRequest();
+            xhr.open("GET", "http://www.alpati.net/DWEC/examen/get_list", true);
+
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    let data = JSON.parse(xhr.responseText);
+                    let lista = construirLista(data);
+                    document.body.appendChild(lista);
+                } else {
+                    console.error("Error en la petición AJAX");
+                }
+            };
+
+            xhr.onerror = function () {
+                console.error("Error de red al intentar obtener los datos.");
+            };
+
+            xhr.send();
+        }
+
+        function construirLista(datos) {
+            let mapaCategorias = {};
+
+            // Organizar datos en un objeto con id como clave
+            datos.forEach(item => {
+                mapaCategorias[item.id] = { ...item, hijos: [] }; // "..." Spread operator. Copia las propiedades de item sin tener que escribir cada una manualmente.
+            });
+
+            // Asignar hijos a sus respectivos padres
+            let raiz = [];
+            datos.forEach(item => {
+                if (item.parent_id === 0) {
+                    raiz.push(mapaCategorias[item.id]);
+                } else {
+                    mapaCategorias[item.parent_id].hijos.push(mapaCategorias[item.id]);
+                }
+            });
+
+            // Función recursiva para construir el HTML
+            function crearLista(categorias) {
+                categorias.sort((a, b) => a.name.localeCompare(b.name)); // Ordenar alfabéticamente
+                let ul = document.createElement("ul");
+                categorias.forEach(categoria => {
+                    let li = document.createElement("li");
+                    li.textContent = categoria.name;
+                    if (categoria.hijos.length > 0) {
+                        li.appendChild(crearLista(categoria.hijos));
+                    }
+                    ul.appendChild(li);
+                });
+                return ul;
+            }
+
+            return crearLista(raiz);
+        }
+
+        // Llamar a la función al cargar la página
+        window.onload = cargarCategorias;
+
+    </script>
+</body>
+</html>

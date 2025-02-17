@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        console.log("Inicio");
+
+setTimeout(() => {
+    console.log("Timeout 1");
+    
+    Promise.resolve().then(() => {
+        console.log("Promesa dentro de Timeout 1");
+        
+        setTimeout(() => console.log("Timeout dentro de Promesa"), 0);
+    });
+}, 20);
+
+Promise.resolve().then(() => {
+    console.log("Promesa 1");
+    
+    return Promise.resolve("Valor Promesa 2");
+}).then((valor) => {
+    console.log(valor);
+    
+    queueMicrotask(() => console.log("Microtarea dentro de Promesa 2"));
+
+    return Promise.resolve();
+}).then(() => {
+    console.log("Promesa 3");
+});
+
+queueMicrotask(() => console.log("Microtarea 1"));
+
+setTimeout(() => console.log("Timeout 2"), 0);
+
+console.log("Intermedio");
+
+Promise.resolve().then(() => console.log("Promesa 4"));
+
+console.log("Fin");
+
+    </script>
+</body>
+</html>

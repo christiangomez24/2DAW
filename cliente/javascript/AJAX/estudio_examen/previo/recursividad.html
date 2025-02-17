@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let categorias = [
+            { id: 1, nombre: "Animales", parent_id: 0 },
+            { id: 2, nombre: "Mamíferos", parent_id: 1 },
+            { id: 3, nombre: "Reptiles", parent_id: 1 },
+            { id: 4, nombre: "Felinos", parent_id: 2 },
+            { id: 5, nombre: "Caninos", parent_id: 2 },
+            { id: 6, nombre: "Gatos", parent_id: 4 },
+            { id: 7, nombre: "Leones", parent_id: 4 },
+            { id: 8, nombre: "Serpientes", parent_id: 3 },
+            { id: 9, nombre: "Cocodrilos", parent_id: 3 }
+        ];
+
+
+        function construirLista(datos) {
+            let mapaCategorias = {};
+
+            // 1️⃣ Organizar datos en un objeto con id como clave
+            datos.forEach(item => {
+                mapaCategorias[item.id] = { ...item, hijos: [] };
+            });
+
+            // 2️⃣ Asignar cada elemento a su padre
+            let raiz = [];
+            datos.forEach(item => {
+                if (item.parent_id === 0) {
+                    raiz.push(mapaCategorias[item.id]);
+                } else {
+                    mapaCategorias[item.parent_id].hijos.push(mapaCategorias[item.id]);
+                }
+            });
+
+            // 3️⃣ Función recursiva para construir la lista
+            function crearLista(categorias) {
+                categorias.sort((a, b) => a.nombre.localeCompare(b.nombre)); // Ordenar alfabéticamente
+                let ul = document.createElement("ul");
+
+                categorias.forEach(categoria => {
+                    let li = document.createElement("li");
+                    li.textContent = categoria.nombre;
+                    if (categoria.hijos.length > 0) {
+                        li.appendChild(crearLista(categoria.hijos)); // Llamada recursiva
+                    }
+                    ul.appendChild(li);
+                });
+
+                return ul;
+            }
+
+            return crearLista(raiz);
+        }
+
+        // 4️⃣ Insertar la lista en el DOM
+        window.onload = function() {
+            let lista = construirLista(categorias);
+            document.body.appendChild(lista);
+        };
+
+
+    </script>
+</body>
+</html>

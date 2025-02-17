@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Pokémon</title>
+</head>
+<body>
+    <script>
+        let xhr = new XMLHttpRequest();
+
+        // Obtener la lista de Pokémon
+        xhr.open('GET', 'https://pokeapi.co/api/v2/pokemon');
+        xhr.send();
+
+        xhr.onload = function () {
+            if (xhr.status === 200) { // El código 200 significa éxito en la solicitud
+                let data = JSON.parse(xhr.responseText);
+
+                let pokemons = data.results; // Lista de Pokémon
+                console.log(pokemons);
+
+                // Crear un contenedor para la lista
+                let lista = document.createElement('div');
+
+                pokemons.forEach(pokemon => {
+                    // Hacer una solicitud para obtener detalles del Pokémon
+                    let imagenXHR = new XMLHttpRequest();
+                    imagenXHR.open('GET', pokemon.url);
+                    imagenXHR.send();
+
+                    imagenXHR.onload = function () {
+                        if (imagenXHR.status === 200) {
+                            let contenido = JSON.parse(imagenXHR.responseText);
+
+                            // Crear un elemento contenedor para cada Pokémon
+                            let item = document.createElement('div');
+                            item.style.marginBottom = "20px"; // Espaciado entre los Pokémon
+
+                            // Crear un elemento para el nombre
+                            let nombre = document.createElement('h3');
+                            nombre.textContent = contenido.name;
+
+                            // Crear un elemento de imagen
+                            let imagen = document.createElement('img');
+                            imagen.src = contenido.sprites.other["official-artwork"].front_default;
+                            imagen.alt = contenido.name;
+                            imagen.style.width = "150px"; // Ajustar tamaño de la imagen
+                            imagen.style.height = "150px";
+
+                            // Añadir nombre e imagen al contenedor
+                            item.appendChild(nombre);
+                            item.appendChild(imagen);
+
+                            // Añadir el contenedor al listado
+                            lista.appendChild(item);
+                        }
+                    };
+                });
+
+                // Añadir el listado al cuerpo del documento
+                document.body.appendChild(lista);
+            } else {
+                console.error('Error al cargar los datos:', xhr.status);
+            }
+        };
+    </script>
+</body>
+</html>

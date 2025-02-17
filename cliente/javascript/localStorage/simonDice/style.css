@@ -1,0 +1,62 @@
+.btn {
+    width: 200px;
+    background: black;
+    height: 100px;
+}
+.verde{
+    background-color: rgba(0, 125, 43, 0.99);
+} 
+.verde:hover{
+    background-color: rgba(0, 125, 43, 0.6);
+}
+
+.rojo{
+    background-color: rgba(255, 0, 0, 0.99);
+}
+.rojo:hover{
+    background-color: rgba(255, 0, 0, 0.6);
+}
+
+.azul{
+    background-color: rgba(0, 0, 255, 0.99);
+}
+.azul:hover{
+    background-color: rgba(0, 0, 255, 0.6);
+}
+
+.amarillo{
+    background-color: rgba(255, 230, 0, 0.99);
+}
+.amarillo:hover{
+    background-color: rgba(255, 230, 0, 0.6);
+}
+
+
+
+ /* The Modal (background) */
+ .modal {
+    display: block;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.7);
+  }
+  
+  /* Modal Content */
+  .modal-content {
+    position: relative;
+    background-color: #dcd2d2;
+    margin: auto;
+    padding: 0;
+    width: 90%;
+    max-width: 1200px;
+    text-align: center;
+  }
+  .modal-content *{
+    text-align: center;
+  }
