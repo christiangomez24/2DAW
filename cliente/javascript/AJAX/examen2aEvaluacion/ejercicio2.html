@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El ahorcado</title>
+</head>
+<body>
+
+    <style>
+        #contenedor {
+            margin: auto;
+            width: 500px;
+            text-align: center;
+            font-size: 24px;
+        }
+        img {
+            width: 50%;
+        }
+    </style>
+
+    <div id="contenedor">
+        <div>El juego de</div>
+        <div>el ahorcado</div>
+        <img src="" alt="">
+        <div>Te quedan <span id="intentos"></span> intentos</div>
+        <div>Has utilizado las letras: <span id="letras"></span></div>
+        <div id="palabra"></div>
+        <div id="pista">Pista: <span id="pista"></span></div>
+        <div>
+            <button type="button" id="btnPista">Mostrar pista</button>
+            <button type="button" id="btnReiniciar">Reiniciar juego</button>
+        </div>
+    </div>
+
+    <script>
+        // iniciar variables
+        const API = "http://ahorcado.alpati.net";
+
+        //conseguir y guardar token
+        async function obtenerToken() {
+            let token = localStorage.getItem("token"); //Inicializo variable para poder trabajar con ella posteriormente:
+
+            if (!token) { // Si no existe se pide token, si existe devuelve el token almacenado.
+            try {
+                const respuesta = await fetch(API + "/create_hangman_token", {
+                                                    method: "POST",
+                                                    body: JSON.stringify({username:"Christian"})
+                                                });
+                if (!respuesta.ok) {
+                    throw new Error(`Error al obtener el token: ${respuesta.status}`);
+                }
+                const datos = await respuesta.json();
+                //console.log(datos);
+                token = datos.hangman_token;
+                localStorage.setItem("token", token); // Se almacena en localStorage para futuro
+
+            } catch (error) {
+                console.error("Error:", error);
+            }
+            }
+            return token;
+    }
+
+    //obtener palabra y pista
+    async function obtenerPalabra(token) {
+        let palabra = localStorage.getItem("palabra"); // Trato de coger la palabra local si ya existe
+        let pista = localStorage.getItem("pista"); // Lo mismo con la pista
+
+        if (!palabra){ // Si no existe la obtengo de la API
+            try {
+                const respuesta2 = await fetch(API+"/get_word/"+token, {
+                method: "GET",
+                });
+                if (!respuesta2.ok)
+                    throw new Error("Error al obtener la palabra");
+
+                const datos2 = await respuesta2.json();
+                palabra = datos2.word;
+                pista = datos2.hint;
+                
+                // Se almacena el token en localStorage para usos futuros
+                localStorage.setItem("palabra", palabra);
+                localStorage.setItem("pista", pista);
+            } catch (error) {
+                console.error("Error:", error);
+            }
+
+        }
+        //return palabra; // Ahora lo cojo desde LocalStorage
+    }
+
+
+        //controlar pulsación de teclas
+        function teclaPulsada(tecla){
+            tecla = tecla.toUpperCase();
+            if (letrasPulsadas.includes(tecla)){
+                alert("Ya has utilizado esa letra");
+                return
+            } else {
+                letrasPulsadas.push(tecla);
+                document.getElementById("letras").innerHTML = letrasPulsadas.join(", ");
+            }
+
+            if(JSON.parse(localStorage.getItem("palabraTroceada")).includes(tecla)){
+                actualizo_palabra();
+            } else {
+                resto_intentos();
+            }
+        }
+
+        //ir actualizando la palabra conforme a las teclas introducidas
+        function actualizo_palabra(){
+            palabra_oculta = JSON.parse(localStorage.getItem("palabraTroceada")).map((a)=>(letrasPulsadas.includes(a)?a:"_")).join(" ");
+            document.getElementById("palabra").innerHTML = palabra_oculta;
+
+            if (!palabra_oculta.includes("_") && (letrasPulsadas.length>0)){
+                alert("Has ganado");
+            }
+        }
+
+
+
+        // se trocea la palabra en un array para trabajar con ella
+        function troceoPalabra(palabra){
+            let palabraTroceada = [];
+            for (let i=0; i<palabra.length; i++){
+                palabraTroceada[i] = palabra.charAt(i);
+            }
+            localStorage.setItem("palabraTroceada", JSON.stringify(palabraTroceada));
+            //console.log(palabraTroceada);
+            console.log(JSON.parse(localStorage.getItem("palabraTroceada")));
+        }
+
+
+        //TODO: localstorage
+        //controlar intentos restantes
+        function resto_intentos(){
+            let intentos = localStorage.getItem("intentos");
+            intentos--;
+            localStorage.setItem("intentos", intentos);
+            //actualizo el campo de intentos
+            document.getElementById("intentos").innerHTML = intentos;
+            document.getElementsByTagName("img")[0].src= API+"/assets/img/ahorcado_"+intentos+".png";
+
+            if (intentos==0){
+                alert("Has perdido");
+            }
+
+        }
+
+        //ejecutar juego y controlar toda la logica
+        async function jugar () {
+                //obtengo token
+            let token = await obtenerToken(); // await para esperar al resultado
+
+                //obtengo palabra
+            await obtenerPalabra(token); //le paso el token y hasta no obtenerlo no continua el hilo de ejecución
+
+            let palabra = localStorage.getItem("palabra");
+            let pista = localStorage.getItem("pista");
+
+            //controlo si ha consumido intentos
+            if (!localStorage.getItem("intentos"))  localStorage.setItem("intentos",6)
+            let intentos = localStorage.getItem("intentos");
+            // imprimo los intentos restantes
+            document.getElementById("intentos").appendChild(document.createTextNode(intentos));
+            //imprimo la imagen correspondiente a los intentos restantes
+            document.getElementsByTagName("img")[0].src= API+"/assets/img/ahorcado_"+intentos+".png";
+            //imprimo la pista si anteriormente fue mostrada
+            if (localStorage.getItem("pistaMostrada"))
+            document.getElementById("pista").appendChild(document.createTextNode(localStorage.getItem("pista")));
+
+
+            //TODO: controlar si hay letras pulsadas
+            letrasPulsadas = [];
+
+
+             // Controlar si hay palabra troceada
+             if (!localStorage.getItem("palabraTroceada"))
+                troceoPalabra(palabra); // la troceo en un array
+
+            actualizo_palabra(); // Muestro la palabra troceada como huecos por pantalla
+
+            document.addEventListener("keydown", (event) => {
+                if (event.isComposing || event.keyCode === 229){ //isComposing controla las teclas combinadas como una Ñ en un teclado iso con la combinación de alt+n o similar
+                    return;
+                }
+                teclaPulsada(event.key);
+            });
+
+
+
+            // boton pista
+            btnPista = document.getElementById("btnPista");
+            btnPista.addEventListener("click", (event)=>{
+                let pistaMostrada = localStorage.getItem("pistaMostrada");
+                if (!pistaMostrada){
+                    console.log("Se muestra la pista y se marca como mostrada");
+                    localStorage.setItem("pistaMostrada", true);
+                    document.getElementById("pista").appendChild(document.createTextNode(localStorage.getItem("pista")));
+                }
+            });
+
+            // boton reiniciar 
+            btnReiniciar = document.getElementById("btnReiniciar");
+            btnReiniciar.addEventListener("click", (event)=>{
+                localStorage.removeItem("pistaMostrada");
+                localStorage.removeItem("pista");
+                localStorage.removeItem("palabra");
+                localStorage.removeItem("intentos");
+                window.location.reload(); //Actualiza la pagina (F5)
+            });
+
+
+        }
+        jugar();
+    </script>
+    
+</body>
+</html>

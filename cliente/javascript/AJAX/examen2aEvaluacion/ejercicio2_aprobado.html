@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            margin: auto;
+            width: 500px;
+            text-align: center;
+            font-size: 24px;
+        }
+        #imagen {
+            width:50%;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div>El juego de</div>
+        <div>El Ahorcado</div>
+        <div><img id="imagen" src="http://ahorcado.alpati.net/assets/img/ahorcado_6.png"></div>
+        <div>Te quedan <span id="intentos"></span> intentos</div>
+        <div>Has utilizado las letras <span id="letras"></span></div>
+        <div id="palabra"></div>
+        <div>Pista: <span id="pista"></span></div>
+        <div>
+            <button>Pista</button>
+            <button>Reiniciar juego</button>
+        </div>
+        <div style="display:none;">
+            <audio id="ganar_sonido" controls src="/media/cc0-audio/t-rex-roar.mp3"></audio>
+            <audio id="perder_sonido" controls src="/media/cc0-audio/t-rex-roar.mp3"></audio>
+        </div>
+
+    </div>
+
+
+    <script>
+    const URL = "http://ahorcado.alpati.net";
+    
+    var palabra = []; //Palabra a descubrir convertida a array
+    var pista; //Pista sobre la palabra oculta
+    var letras = []; //Array que incluye las letras que se van pulsando
+    var intentos = 6; // Intentos disponibles
+
+    async function getHangmanToken() {
+        const url = URL +"/create_hangman_token";
+        const body = {"username":"Alfonso"};
+        try {
+            const response = await fetch(url,{method: "POST", body: JSON.stringify(body)   });
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
+
+            const json = await response.json();
+            return json;
+
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
+    async function getHangmanWord(hangmanToken) {
+        const url = URL + "/get_word/"+hangmanToken;
+        try {
+            const response = await fetch(url,{method: "GET" });
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
+
+            const json = await response.json();
+            return json;
+
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
+    function pulsacionTecla(tecla){
+        tecla = tecla.toUpperCase();
+        if (letras.includes(tecla)){
+            alert("Ya has utilizado esa letra");
+            return;
+        } else {
+            letras.push(tecla);
+            document.getElementById("letras").innerHTML = letras.join(", ");
+        }
+
+        if (palabra.includes(tecla)){
+            actualizo_palabra();
+        } else {
+            resto_intentos();
+        }
+    }
+
+    function actualizo_palabra(){
+            palabra_oculta = palabra.map((a)=>(letras.includes(a)?a:"_")).join(" ");
+            document.getElementById("palabra").innerHTML = palabra_oculta;
+
+            if  (!palabra_oculta.includes("_") && (letras.length>0)){
+                alert("Has ganado");
+                document.getElementById("ganar_sonido").play();
+            }
+    }
+
+    function resto_intentos(){
+        intentos--;
+        //actualizo el campo de intentos
+        document.getElementById("intentos").innerHTML = intentos;
+        document.getElementById("imagen").src= "http://ahorcado.alpati.net/assets/img/ahorcado_"+intentos+".png";
+
+        if (intentos==0){
+            alert("Has perdido");
+            document.getElementById("perder_sonido").play();
+        }
+
+    }
+
+
+    async function jugar(){
+        //TODO: Guardar token
+
+        tokenJSON = await getHangmanToken();
+        wordJSON = await getHangmanWord(tokenJSON.hangman_token);
+
+        palabraStr = wordJSON.word;
+        document.getElementById("intentos").innerHTML = intentos;
+        
+
+        // Convertimos la palabra en un array
+        // palabra = palabraStr.split("");
+        for (let i=0; i<palabraStr.length;i++){
+            palabra[i] = palabraStr.charAt(i);
+        }
+        
+        console.log(palabra);
+        actualizo_palabra();
+        
+        // obtener pulsación de teclado
+        document.addEventListener("keydown", (event) => {
+            if (event.isComposing || event.keyCode === 229) {
+                return;
+            }
+            pulsacionTecla(event.key);
+        });
+    }
+    
+   jugar();
+
+
+    </script>
+
+</body>
+</html>
