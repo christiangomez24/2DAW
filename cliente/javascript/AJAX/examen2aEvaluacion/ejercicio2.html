@@ -94,11 +94,13 @@
         //controlar pulsación de teclas
         function teclaPulsada(tecla){
             tecla = tecla.toUpperCase();
+            let letrasPulsadas = JSON.parse(localStorage.getItem("letrasPulsadas"));
             if (letrasPulsadas.includes(tecla)){
                 alert("Ya has utilizado esa letra");
                 return
             } else {
                 letrasPulsadas.push(tecla);
+                localStorage.setItem("letrasPulsadas", JSON.stringify(letrasPulsadas));
                 document.getElementById("letras").innerHTML = letrasPulsadas.join(", ");
             }
 
@@ -111,6 +113,7 @@
 
         //ir actualizando la palabra conforme a las teclas introducidas
         function actualizo_palabra(){
+            let letrasPulsadas = localStorage.getItem("letrasPulsadas");
             palabra_oculta = JSON.parse(localStorage.getItem("palabraTroceada")).map((a)=>(letrasPulsadas.includes(a)?a:"_")).join(" ");
             document.getElementById("palabra").innerHTML = palabra_oculta;
 
@@ -132,8 +135,6 @@
             console.log(JSON.parse(localStorage.getItem("palabraTroceada")));
         }
 
-
-        //TODO: localstorage
         //controlar intentos restantes
         function resto_intentos(){
             let intentos = localStorage.getItem("intentos");
@@ -159,6 +160,12 @@
 
             let palabra = localStorage.getItem("palabra");
             let pista = localStorage.getItem("pista");
+            let letrasPulsadas = [];
+
+            //controlo si hay letras pulsadas
+            if (!localStorage.getItem("letrasPulsadas")){
+                localStorage.setItem("letrasPulsadas", JSON.stringify(letrasPulsadas));
+            }
 
             //controlo si ha consumido intentos
             if (!localStorage.getItem("intentos"))  localStorage.setItem("intentos",6)
@@ -170,10 +177,8 @@
             //imprimo la pista si anteriormente fue mostrada
             if (localStorage.getItem("pistaMostrada"))
             document.getElementById("pista").appendChild(document.createTextNode(localStorage.getItem("pista")));
-
-
-            //TODO: controlar si hay letras pulsadas
-            letrasPulsadas = [];
+            //imprimo letras pulsadas
+            document.getElementById("letras").innerHTML = JSON.parse(localStorage.getItem("letrasPulsadas")).join(", ");
 
 
              // Controlar si hay palabra troceada
@@ -209,6 +214,8 @@
                 localStorage.removeItem("pista");
                 localStorage.removeItem("palabra");
                 localStorage.removeItem("intentos");
+                localStorage.removeItem("letrasPulsadas");
+                localStorage.removeItem("palabraTroceada");
                 window.location.reload(); //Actualiza la pagina (F5)
             });
 
